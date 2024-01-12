@@ -3,6 +3,7 @@
 #include "Headers/Map.h"
 #include "Headers/ECS.h"
 #include "Headers/Components.h"
+#include "Headers/Vector2D.h"
 
 Map* map;
 
@@ -49,7 +50,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	map = new Map();
 
 	// ECS implementation
-	player.addComponent<PositionComponent>(0,0);
+	player.addComponent<TransformComponent>();
 	player.addComponent<SpriteComponent>("src/Assets/Player.png");
 }
 
@@ -72,8 +73,9 @@ void Game::update()
 {
 	manager.refresh();
 	manager.update();
+	player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
 
-	if (player.getComponent<PositionComponent>().x() > 100)
+	if (player.getComponent<TransformComponent>().position.x > 100)
 	{
 		player.getComponent<SpriteComponent>().setTexture("src/Assets/Enemy.png");
 	}

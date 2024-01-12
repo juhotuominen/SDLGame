@@ -137,9 +137,10 @@
     <ClInclude Include="src\Headers\GameObject.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Map.h" />
-    <ClInclude Include="src\Headers\PositionComponent.h" />
+    <ClInclude Include="src\Headers\TransformComponent.h" />
     <ClInclude Include="src\Headers\SpriteComponent.h" />
     <ClInclude Include="src\Headers\TextureManager.h" />
+    <ClInclude Include="src\Headers\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
+    <ClCompile Include="src\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Assets\Dirt.png" />
