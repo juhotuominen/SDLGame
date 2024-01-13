@@ -9,10 +9,13 @@
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
+std::vector<ColliderComponent*> Game::colliders;
+
 Map* map;
 Manager manager;
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
+
 
 Game::Game()
 {}
@@ -52,6 +55,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	map = new Map();
 
 	// ECS implementation
+
+	Map::LoadMap("src/Assets/map16x16.map", 16, 16);
+
 	player.addComponent<TransformComponent>(2);
 	player.addComponent<SpriteComponent>("src/Assets/Player.png");
 	player.addComponent<KeyboardController>();
@@ -78,16 +84,20 @@ void Game::handleEvents()
 	}
 }
 
-void Game::update()
-{
+void Game::update() {
+
+	Vector2D playerPos = player.getComponent<TransformComponent>().position;
+
 	manager.refresh();
 	manager.update();
 
-	if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
-		wall.getComponent<ColliderComponent>().collider))
+	for (auto cc : colliders)
 	{
-		player.getComponent<TransformComponent>().scale = 1;
-		Log("Wall Hit!");
+		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
+		/*if (Collision::AABB(player.getComponent<ColliderComponent>(), *cc))
+		{
+			player.getComponent<TransformComponent>().position = playerPos;
+		}*/
 	}
 	
 }
@@ -95,7 +105,6 @@ void Game::update()
 void Game::render()
 {
 	SDL_RenderClear(renderer);
-	map->DrawMap();
 	manager.draw();
 	SDL_RenderPresent(renderer);
 
@@ -109,3 +118,8 @@ void Game::clean()
 	Log("Game Cleaned!");
 }
 
+void Game::AddTile(int id, int x, int y)
+{
+	auto& tile(manager.addEntity());
+	tile.addComponent<TileComponent>(x, y, 32, 32, id);
+}

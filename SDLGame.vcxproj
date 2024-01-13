@@ -140,6 +140,7 @@
     <ClInclude Include="src\Headers\KeyboardController.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Map.h" />
+    <ClInclude Include="src\Headers\TileComponent.h" />
     <ClInclude Include="src\Headers\TransformComponent.h" />
     <ClInclude Include="src\Headers\SpriteComponent.h" />
     <ClInclude Include="src\Headers\TextureManager.h" />

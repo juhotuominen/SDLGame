@@ -3,6 +3,9 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Log.h"
+#include <vector>
+
+class ColliderComponent;
 
 class Game {
 
@@ -17,8 +20,10 @@ public:
 	void render();
 	void clean();
 
+	static void AddTile(int id, int x, int y);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
+	static std::vector<ColliderComponent*> colliders;
 
 private:
 	int counter = 0;

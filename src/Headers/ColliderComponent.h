@@ -8,7 +8,7 @@ class ColliderComponent : public Component
 {
 public:
 
-	SDL_Rect collider;
+	SDL_Rect colliderRect;
 	std::string tag;
 
 	TransformComponent* transform;
@@ -25,14 +25,16 @@ public:
 			entity->addComponent<TransformComponent>();
 		}
 		transform = &entity->getComponent<TransformComponent>();
+
+		Game::colliders.push_back(this);
 	}
 
 	void update() override
 	{
-		collider.x = static_cast<int>(transform->position.x);
-		collider.y = static_cast<int>(transform->position.y);
-		collider.w = transform->width * transform->scale;
-		collider.h = transform->height * transform->scale;
+		colliderRect.x = static_cast<int>(transform->position.x);
+		colliderRect.y = static_cast<int>(transform->position.y);
+		colliderRect.w = transform->width * transform->scale;
+		colliderRect.h = transform->height * transform->scale;
 	}
 
 };
