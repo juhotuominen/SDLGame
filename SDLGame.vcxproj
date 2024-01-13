@@ -135,6 +135,7 @@
     <ClInclude Include="src\Headers\ECS.h" />
     <ClInclude Include="src\Headers\Game.h" />
     <ClInclude Include="src\Headers\GameObject.h" />
+    <ClInclude Include="src\Headers\KeyboardController.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Map.h" />
     <ClInclude Include="src\Headers\TransformComponent.h" />
