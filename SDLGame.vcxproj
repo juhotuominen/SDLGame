@@ -130,6 +130,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Headers\ColliderComponent.h" />
+    <ClInclude Include="src\Headers\Collision.h" />
     <ClInclude Include="src\Headers\Components.h" />
     <ClInclude Include="src\Headers\Constants.h" />
     <ClInclude Include="src\Headers\ECS.h" />
@@ -144,6 +146,7 @@
     <ClInclude Include="src\Headers\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Log.cpp" />
