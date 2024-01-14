@@ -100,22 +100,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\Assets\Dirt.png">
-      <Filter>Assets</Filter>
-    </Image>
     <Image Include="src\Assets\Enemy.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="src\Assets\Grass.png">
       <Filter>Assets</Filter>
     </Image>
     <Image Include="src\Assets\Player.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="src\Assets\Water.png">
+    <Image Include="src\Assets\player_anims.png">
       <Filter>Assets</Filter>
     </Image>
-    <Image Include="src\Assets\player_anims.png">
+    <Image Include="src\Assets\MapAssets\map_assets.png">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>

@@ -16,6 +16,8 @@ Manager manager;
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
 
+const char* mapfile = "src/Assets/MapAssets/map_assets.png";
+
 enum groupLabels : std::size_t 
 {
 	groupMap,
@@ -63,18 +65,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	// ECS implementation
 
-	Map::LoadMap("src/Assets/map16x16.map", 16, 16);
+	Map::LoadMap("src/Assets/correctMap.map", 40, 20);
 
-	player.addComponent<TransformComponent>(2);
+	player.addComponent<TransformComponent>(4);
 	player.addComponent<SpriteComponent>("src/Assets/player_anims.png", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
-
-	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-	wall.addComponent<SpriteComponent>("src/Assets/Dirt.png");
-	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(groupMap);
 }
 
 void Game::handleEvents()
@@ -103,10 +100,6 @@ void Game::update() {
 	for (auto cc : colliders)
 	{
 		Collision::AABB(player.getComponent<ColliderComponent>(), *cc);
-		/*if (Collision::AABB(player.getComponent<ColliderComponent>(), *cc))
-		{
-			player.getComponent<TransformComponent>().position = playerPos;
-		}*/
 	}
 	
 }
@@ -144,9 +137,9 @@ void Game::clean()
 	Log("Game Cleaned!");
 }
 
-void Game::AddTile(int id, int x, int y)
+void Game::AddTile(int srcX, int srcY, int xpos, int ypos)
 {
 	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(x, y, 32, 32, id);
+	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, mapfile);
 	tile.addGroup(groupMap);
 }

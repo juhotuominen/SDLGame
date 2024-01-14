@@ -159,12 +159,10 @@
     <ClCompile Include="src\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\Assets\Dirt.png" />
     <Image Include="src\Assets\Enemy.png" />
-    <Image Include="src\Assets\Grass.png" />
+    <Image Include="src\Assets\MapAssets\map_assets.png" />
     <Image Include="src\Assets\Player.png" />
     <Image Include="src\Assets\player_anims.png" />
-    <Image Include="src\Assets\Water.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
