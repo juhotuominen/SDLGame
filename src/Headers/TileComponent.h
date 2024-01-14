@@ -20,9 +20,9 @@ public:
 		SDL_DestroyTexture(texture);
 	}
 
-	TileComponent(int srcX, int srcY, int xpos, int ypos, int tileSize, int tileScale, const char* path)
+	TileComponent(int srcX, int srcY, int xpos, int ypos, int tileSize, int tileScale, std::string id)
 	{
-		texture = TextureManager::LoadTexture(path);
+		texture = Game::assets->GetTexture(id);
 
 		position.x = xpos;
 		position.y = ypos;

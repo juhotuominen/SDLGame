@@ -72,6 +72,9 @@
     <ClInclude Include="src\Headers\AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Headers\ProjectileComponent.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -101,18 +104,21 @@
     <ClCompile Include="src\ECS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\Assets\Enemy.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="src\Assets\Player.png">
-      <Filter>Assets</Filter>
-    </Image>
     <Image Include="src\Assets\player_anims.png">
       <Filter>Assets</Filter>
     </Image>
     <Image Include="src\Assets\MapAssets\map_assets.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="src\Assets\Projectile.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="src\Assets\MapAssets\colTex.png">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>

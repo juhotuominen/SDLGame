@@ -142,6 +142,7 @@
     <ClInclude Include="src\Headers\KeyboardController.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Map.h" />
+    <ClInclude Include="src\Headers\ProjectileComponent.h" />
     <ClInclude Include="src\Headers\TileComponent.h" />
     <ClInclude Include="src\Headers\TransformComponent.h" />
     <ClInclude Include="src\Headers\SpriteComponent.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="src\Headers\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\ECS.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -160,10 +162,10 @@
     <ClCompile Include="src\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="src\Assets\Enemy.png" />
+    <Image Include="src\Assets\MapAssets\colTex.png" />
     <Image Include="src\Assets\MapAssets\map_assets.png" />
-    <Image Include="src\Assets\Player.png" />
     <Image Include="src\Assets\player_anims.png" />
+    <Image Include="src\Assets\Projectile.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

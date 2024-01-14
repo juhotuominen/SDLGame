@@ -6,13 +6,17 @@
 #include "Headers/Vector2D.h"
 #include "Headers/Collision.h"
 #include"Headers/Constants.h"
+#include "Headers/AssetManager.h"
 
 Map* map;
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
+
 SDL_Rect Game::camera = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+
+AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
 
@@ -53,22 +57,33 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 		isRunning = true;
 	}
-	map = new Map("src/Assets/MapAssets/map_assets.png", 3, 32);
+
+	assets->AddTexture("terrain", "src/Assets/MapAssets/map_assets.png");
+	assets->AddTexture("player", "src/Assets/player_anims.png");
+	assets->AddTexture("projectile", "src/Assets/Projectile.png");
+
+	map = new Map("terrain", 3, 32);
 
 	// ECS implementation
 
 	map->LoadMap("src/Assets/map.map", 40, 20);
 
 	player.addComponent<TransformComponent>(4);
-	player.addComponent<SpriteComponent>("src/Assets/player_anims.png", true);
+	player.addComponent<SpriteComponent>("player", true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
+
+	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0), 200, 2, "projectile");
+	assets->CreateProjectile(Vector2D(600, 620), Vector2D(2, 0), 200, 2, "projectile");
+	assets->CreateProjectile(Vector2D(400, 600), Vector2D(2, 1), 200, 2, "projectile");
+	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2, -1), 200, 2, "projectile");
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& colliders(manager.getGroup(Game::groupColliders));
+auto& projectiles(manager.getGroup(Game::groupProjectiles));
 
 void Game::handleEvents()
 {
@@ -98,6 +113,15 @@ void Game::update()
 		if (Collision::AABB(cCol, playerCol))
 		{
 			player.getComponent<TransformComponent>().position = playerPos;
+		}
+	}
+
+	for (auto& p : projectiles)
+	{
+		if (Collision::AABB(player.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
+		{
+			Log("Hit player");
+			p->destroy();
 		}
 	}
 
@@ -131,6 +155,11 @@ void Game::render()
 	}
 
 	for (auto& p : players)
+	{
+		p->draw();
+	}
+
+	for (auto& p : projectiles)
 	{
 		p->draw();
 	}
