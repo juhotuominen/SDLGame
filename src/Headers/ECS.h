@@ -69,6 +69,7 @@ public:
 	{
 		for (auto& c : components) c->draw();
 	}
+
 	bool isActive() const { return active; }
 	void destroy() { active = false; }
 

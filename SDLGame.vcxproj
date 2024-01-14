@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\Animation.h" />
+    <ClInclude Include="src\Headers\AssetManager.h" />
     <ClInclude Include="src\Headers\ColliderComponent.h" />
     <ClInclude Include="src\Headers\Collision.h" />
     <ClInclude Include="src\Headers\Components.h" />
