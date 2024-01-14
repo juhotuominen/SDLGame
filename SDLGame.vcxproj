@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Headers\Animation.h" />
     <ClInclude Include="src\Headers\ColliderComponent.h" />
     <ClInclude Include="src\Headers\Collision.h" />
     <ClInclude Include="src\Headers\Components.h" />
@@ -162,6 +163,7 @@
     <Image Include="src\Assets\Enemy.png" />
     <Image Include="src\Assets\Grass.png" />
     <Image Include="src\Assets\Player.png" />
+    <Image Include="src\Assets\player_anims.png" />
     <Image Include="src\Assets\Water.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
