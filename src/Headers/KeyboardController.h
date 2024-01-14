@@ -48,6 +48,7 @@ public:
 			transform->velocity.x = 1;
 			sprite->play("Walk");
 		}
+
 		if (keystates[SDL_SCANCODE_ESCAPE])
 		{
 			Game::isRunning = false;
