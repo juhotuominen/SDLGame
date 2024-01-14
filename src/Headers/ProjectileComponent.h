@@ -28,14 +28,16 @@ public:
 			Log("Out of Range");
 			entity->destroy();
 		}
-		else if (transform->position.x > Game::camera.x + Game::camera.w ||
+
+		// Out of bounds logic for projectiles
+		/*else if (transform->position.x > Game::camera.x + Game::camera.w ||
 				transform->position.x < Game::camera.x ||
 				transform->position.y > Game::camera.y + Game::camera.h ||
 				transform->position.y < Game::camera.y)
 		{
 			Log("Out of bounds");
 			entity->destroy();
-		}
+		}*/
 	}
 
 private:

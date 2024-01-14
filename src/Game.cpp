@@ -61,6 +61,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	assets->AddTexture("terrain", "src/Assets/MapAssets/map_assets.png");
 	assets->AddTexture("player", "src/Assets/player_anims.png");
 	assets->AddTexture("projectile", "src/Assets/Projectile.png");
+	assets->AddTexture("playerProjectile", "src/Assets/playerProjectile.png");
 
 	map = new Map("terrain", 3, 32);
 
@@ -74,10 +75,12 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
 
+	/* TESTING PROJECTILES
 	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0), 200, 2, "projectile");
 	assets->CreateProjectile(Vector2D(600, 620), Vector2D(2, 0), 200, 2, "projectile");
 	assets->CreateProjectile(Vector2D(400, 600), Vector2D(2, 1), 200, 2, "projectile");
 	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2, -1), 200, 2, "projectile");
+	*/
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -118,10 +121,13 @@ void Game::update()
 
 	for (auto& p : projectiles)
 	{
-		if (Collision::AABB(player.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
+		if (p->getComponent<SpriteComponent>().identifier != "playerProjectile")
 		{
-			Log("Hit player");
-			p->destroy();
+			if (Collision::AABB(player.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
+			{
+				Log("Hit player");
+				p->destroy();
+			}
 		}
 	}
 

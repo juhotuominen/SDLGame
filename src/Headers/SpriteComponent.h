@@ -15,12 +15,15 @@ private:
 	SDL_Rect srcRect, destRect;
 
 	bool animated = false;
+	
 	int frames = 0;
 	int speed = 100;
 
 public:
 
 	int animIndex = 0;
+	std::string identifier;
+
 	std::map<const char*, Animation> animations;
 
 	SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
@@ -34,10 +37,11 @@ public:
 
 	SpriteComponent(std::string id, bool isAnimated)
 	{
-
+		
 		animated = isAnimated;
+		identifier = id;
 
-		Animation idle = Animation(0, 3, 100);
+		Animation idle = Animation(0, 3, 200);
 		Animation walk = Animation(1, 8, 100);
 
 		animations.emplace("Idle", idle);
