@@ -1,4 +1,5 @@
 #pragma once
+#include "Constants.h"
 #include "Components.h"
 #include "Vector2D.h"
 
@@ -23,7 +24,8 @@ public:
 
 	TransformComponent(int sc)
 	{
-		position.Zero();
+		position.x = WINDOW_WIDTH / 2;
+		position.y = WINDOW_HEIGHT / 2;
 		scale = sc;
 	}
 
@@ -48,7 +50,6 @@ public:
 
 	void update() override
 	{
-		position.x += velocity.x * speed;
-		position.y += velocity.y * speed;
+		
 	}
 };
