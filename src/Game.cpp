@@ -7,6 +7,8 @@
 #include "Headers/Collision.h"
 #include"Headers/Constants.h"
 #include "Headers/AssetManager.h"
+#include <random>
+
 
 Map* map;
 Manager manager;
@@ -19,6 +21,7 @@ SDL_Rect Game::camera = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
+int spawnedEnemies = 0;
 
 auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
@@ -28,6 +31,41 @@ Game::Game()
 
 Game::~Game()
 {}
+
+int Game::getRandomNumber(int min, int max) {
+	std::random_device rd;
+	std::mt19937 gen(rd());  
+	std::uniform_int_distribution<> dis(min, max);
+
+	return dis(gen);
+}
+
+
+void Game::spawnEnemy()
+{
+	static Uint32 lastEnemySpawn = 0;
+	Uint32 currentTime = SDL_GetTicks();
+	Uint32 spawnCooltime = 2000; // in milliseconds
+
+	int randomX = getRandomNumber(200, 1300);
+	int randomY = getRandomNumber(100, 800);
+	auto& newEnemy(manager.addEntity());
+
+	if (spawnedEnemies < 10 && (currentTime - lastEnemySpawn >= spawnCooltime))
+	{
+		newEnemy.addComponent<TransformComponent>(2, randomX * map->GetScale(), randomY * map->GetScale());
+		newEnemy.addComponent<SpriteComponent>("enemy", false);
+		newEnemy.addComponent<ColliderComponent>("enemy");
+		newEnemy.addGroup(Game::groupEnemies);
+		Log("EnemySpawned");
+
+		spawnedEnemies++;
+
+		lastEnemySpawn = currentTime;
+	}
+}
+
+
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -76,12 +114,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
-
-	enemy.addComponent<TransformComponent>(2, 200 * map->GetScale(), 100 * map->GetScale());
-	enemy.addComponent<SpriteComponent>("enemy", false);
-	enemy.addComponent<ColliderComponent>("enemy");
-	enemy.addGroup(groupEnemies);
-
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -111,13 +143,13 @@ void Game::update()
 
 	manager.refresh();
 	manager.update();
-	
+	spawnEnemy();
+
 	for (auto& c : colliders)
 	{
 		SDL_Rect cCol = c->getComponent<ColliderComponent>().colliderRect;
 		if (Collision::AABB(cCol, playerCol))
 		{
-			std::cout << "Hit wall " << std::endl;
 			player.getComponent<TransformComponent>().position = playerPos;
 		}
 	}
@@ -128,18 +160,20 @@ void Game::update()
 		{
 			if (Collision::AABB(player.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
 			{
-				Log("Hit player");
 				p->destroy();
 			}
 		}
-
+		
 		if (p->getComponent<SpriteComponent>().identifier == "playerProjectile")
 		{
-			if (Collision::AABB(enemy.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
+			for (auto& e : enemies)
 			{
-				Log("Hit enemy");
-				p->destroy();
-				enemy.destroy();
+				if (Collision::AABB(e->getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
+				{
+					p->destroy();
+					e->destroy();
+					spawnedEnemies--;
+				}
 			}
 		}
 	}

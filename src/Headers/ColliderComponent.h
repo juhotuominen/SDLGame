@@ -68,6 +68,7 @@ public:
 
 	void draw() override
 	{
-		TextureManager::Draw(tex, srcRect, destRect, SDL_FLIP_NONE);
+		// DEBUG show colliders
+		//TextureManager::Draw(tex, srcRect, destRect, SDL_FLIP_NONE);
 	}
 };
