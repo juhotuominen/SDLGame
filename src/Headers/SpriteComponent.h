@@ -43,9 +43,11 @@ public:
 
 		Animation idle = Animation(0, 3, 200);
 		Animation walk = Animation(1, 8, 100);
+		Animation right = Animation(1, 1, 100);
 
 		animations.emplace("Idle", idle);
 		animations.emplace("Walk", walk);
+		animations.emplace("Right", right);
 
 		play("Idle");
 		setTexture(id);
@@ -96,4 +98,6 @@ public:
 		animIndex = animations[animName].index;
 		speed = animations[animName].speed;
 	}
+
+	
 };

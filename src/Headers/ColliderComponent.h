@@ -47,12 +47,19 @@ public:
 
 	void update() override
 	{
-		if (tag != "terrain")
+		if (tag != "terrain" && tag != "player")
 		{
-			colliderRect.x = static_cast<int>(transform->position.x);
-			colliderRect.y = static_cast<int>(transform->position.y);
+			colliderRect.x = static_cast<int>(transform->position.x + transform->velocity.x * transform->speed);
+			colliderRect.y = static_cast<int>(transform->position.y + transform->velocity.y * transform->speed);
 			colliderRect.w = transform->width * transform->scale;
 			colliderRect.h = transform->height * transform->scale;
+		}
+		if (tag == "player")
+		{
+			colliderRect.x = static_cast<int>(transform->position.x + transform->velocity.x * transform->speed); //+ 60);
+			colliderRect.y = static_cast<int>(transform->position.y + transform->velocity.y * transform->speed);// +10);
+			colliderRect.w = 11 * transform->scale;
+			colliderRect.h = 25 * transform->scale;
 		}
 
 		destRect.x = colliderRect.x - Game::camera.x;

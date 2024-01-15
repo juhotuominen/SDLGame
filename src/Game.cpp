@@ -21,6 +21,7 @@ AssetManager* Game::assets = new AssetManager(&manager);
 bool Game::isRunning = false;
 
 auto& player(manager.addEntity());
+auto& enemy(manager.addEntity());
 
 Game::Game()
 {}
@@ -62,12 +63,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	assets->AddTexture("player", "src/Assets/player_anims.png");
 	assets->AddTexture("projectile", "src/Assets/Projectile.png");
 	assets->AddTexture("playerProjectile", "src/Assets/playerProjectile.png");
+	assets->AddTexture("enemy", "src/Assets/Enemy.png");
 
 	map = new Map("terrain", 3, 32);
 
 	// ECS implementation
 
-	map->LoadMap("src/Assets/map.map", 40, 20);
+	map->LoadMap("src/Assets/correctSizeMap.txt", 48, 27);
 
 	player.addComponent<TransformComponent>(4);
 	player.addComponent<SpriteComponent>("player", true);
@@ -75,18 +77,18 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<ColliderComponent>("player");
 	player.addGroup(groupPlayers);
 
-	/* TESTING PROJECTILES
-	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0), 200, 2, "projectile");
-	assets->CreateProjectile(Vector2D(600, 620), Vector2D(2, 0), 200, 2, "projectile");
-	assets->CreateProjectile(Vector2D(400, 600), Vector2D(2, 1), 200, 2, "projectile");
-	assets->CreateProjectile(Vector2D(600, 600), Vector2D(2, -1), 200, 2, "projectile");
-	*/
+	enemy.addComponent<TransformComponent>(2, 200 * map->GetScale(), 100 * map->GetScale());
+	enemy.addComponent<SpriteComponent>("enemy", false);
+	enemy.addComponent<ColliderComponent>("enemy");
+	enemy.addGroup(groupEnemies);
+
 }
 
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& projectiles(manager.getGroup(Game::groupProjectiles));
+auto& enemies(manager.getGroup(Game::groupEnemies));
 
 void Game::handleEvents()
 {
@@ -115,10 +117,11 @@ void Game::update()
 		SDL_Rect cCol = c->getComponent<ColliderComponent>().colliderRect;
 		if (Collision::AABB(cCol, playerCol))
 		{
+			std::cout << "Hit wall " << std::endl;
 			player.getComponent<TransformComponent>().position = playerPos;
 		}
 	}
-
+	
 	for (auto& p : projectiles)
 	{
 		if (p->getComponent<SpriteComponent>().identifier != "playerProjectile")
@@ -129,20 +132,35 @@ void Game::update()
 				p->destroy();
 			}
 		}
+
+		if (p->getComponent<SpriteComponent>().identifier == "playerProjectile")
+		{
+			if (Collision::AABB(enemy.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
+			{
+				Log("Hit enemy");
+				p->destroy();
+				enemy.destroy();
+			}
+		}
 	}
 
 	camera.x = player.getComponent<TransformComponent>().position.x - (WINDOW_WIDTH / 2);
 	camera.y = player.getComponent<TransformComponent>().position.y - (WINDOW_HEIGHT / 2);
 
-	// Camera boundaries
+
+	/* Camera boundaries.For some reason * 2 works with this resolution
+	   bigger resolution results in white space after map ends.
+
+	   TODO: Fix camera logic
+	 */
 	if (camera.x < 0)
 		camera.x = 0;
 	if (camera.y < 0)
 		camera.y = 0;
-	if (camera.x > camera.w)
-		camera.x = camera.w;
-	if (camera.y > camera.h)
-		camera.y = camera.h;
+	if (camera.x > camera.w * 2)
+		camera.x = camera.w * 2;
+	if (camera.y > camera.h * 2 )
+		camera.y = camera.h * 2;
 
 }
 
@@ -163,6 +181,11 @@ void Game::render()
 	for (auto& p : players)
 	{
 		p->draw();
+	}
+
+	for (auto& e : enemies)
+	{
+		e->draw();
 	}
 
 	for (auto& p : projectiles)

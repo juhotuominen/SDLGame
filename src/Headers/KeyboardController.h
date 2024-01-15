@@ -24,7 +24,12 @@ public:
 
 		transform->velocity.x = 0;
 		transform->velocity.y = 0;
-		sprite->play("Idle");
+
+		if (transform->velocity.x == 0 && transform->velocity.y == 0)
+		{
+			sprite->play("Idle");
+		}
+		
 		sprite->spriteFlip = SDL_FLIP_NONE;
 
 		projPosition = transform->position;
