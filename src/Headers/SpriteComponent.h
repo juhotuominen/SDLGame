@@ -43,11 +43,13 @@ public:
 
 		Animation idle = Animation(0, 3, 200);
 		Animation walk = Animation(1, 8, 100);
-		Animation right = Animation(1, 1, 100);
+		Animation down = Animation(2, 8, 200);
+		Animation up = Animation(3, 3, 300);
 
 		animations.emplace("Idle", idle);
 		animations.emplace("Walk", walk);
-		animations.emplace("Right", right);
+		animations.emplace("Down", down);
+		animations.emplace("Up", up);
 
 		play("Idle");
 		setTexture(id);

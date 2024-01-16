@@ -81,8 +81,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	assets->AddTexture("terrain", "src/Assets/MapAssets/map_assets.png");
 	assets->AddTexture("player", "src/Assets/player_anims.png");
 	assets->AddTexture("projectile", "src/Assets/Projectile.png");
-	assets->AddTexture("playerProjectile", "src/Assets/playerProjectile.png");
-	assets->AddTexture("enemy", "src/Assets/Enemy.png");
+	assets->AddTexture("playerProjectile", "src/Assets/projectile_animations.png");
+	assets->AddTexture("enemy", "src/Assets/enemy_animations.png");
 
 	map = new Map("terrain", 3, 32);
 
@@ -244,6 +244,7 @@ void Game::render()
 void Game::clean()
 {
 	delete assets;
+	delete map;
 	TTF_CloseFont(font);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);

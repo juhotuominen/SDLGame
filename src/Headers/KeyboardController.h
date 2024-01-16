@@ -10,6 +10,7 @@ public:
 	TransformComponent* transform;
 	SpriteComponent* sprite;
 	Vector2D projPosition;
+	Game game;
 
 	void init() override
 	{
@@ -39,7 +40,7 @@ public:
 		if (keystates[SDL_SCANCODE_W]) 
 		{
 			transform->velocity.y = -1;
-			sprite->play("Walk");
+			sprite->play("Up");
 		}
 
 		if (keystates[SDL_SCANCODE_A]) 
@@ -52,7 +53,7 @@ public:
 		if (keystates[SDL_SCANCODE_S]) 
 		{
 			transform->velocity.y = 1;
-			sprite->play("Walk");
+			sprite->play("Down");
 		}
 
 		if (keystates[SDL_SCANCODE_D]) 

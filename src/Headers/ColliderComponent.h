@@ -54,6 +54,8 @@ public:
 			colliderRect.w = transform->width * transform->scale;
 			colliderRect.h = transform->height * transform->scale;
 		}
+
+		// Magic numbers are found by testing and are used to set player collision box to correct size
 		if (tag == "player")
 		{
 			colliderRect.x = static_cast<int>(transform->position.x + transform->velocity.x * transform->speed+ 60);
@@ -69,6 +71,6 @@ public:
 	void draw() override
 	{
 		// DEBUG show colliders
-		TextureManager::Draw(tex, srcRect, destRect, SDL_FLIP_NONE);
+		//TextureManager::Draw(tex, srcRect, destRect, SDL_FLIP_NONE);
 	}
 };

@@ -15,7 +15,7 @@ void Enemy::spawnEnemy(Map* map, Manager& manager, Entity& player) {
 
         auto& newEnemy = manager.addEntity();
         newEnemy.addComponent<TransformComponent>(2, randomX * map->GetScale(), randomY * map->GetScale());
-        newEnemy.addComponent<SpriteComponent>("enemy", false);
+        newEnemy.addComponent<SpriteComponent>("enemy", true);
         newEnemy.addComponent<ColliderComponent>("enemy");
         newEnemy.addGroup(Game::groupEnemies);
 
