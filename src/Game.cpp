@@ -7,11 +7,13 @@
 #include "Headers/Collision.h"
 #include"Headers/Constants.h"
 #include "Headers/AssetManager.h"
+#include "Headers/Enemy.h"
 #include <random>
 
 
 Map* map;
 Manager manager;
+Enemy enemyClass;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -21,7 +23,6 @@ SDL_Rect Game::camera = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
-int spawnedEnemies = 0;
 
 auto& player(manager.addEntity());
 auto& enemy(manager.addEntity());
@@ -31,41 +32,6 @@ Game::Game()
 
 Game::~Game()
 {}
-
-int Game::getRandomNumber(int min, int max) {
-	std::random_device rd;
-	std::mt19937 gen(rd());  
-	std::uniform_int_distribution<> dis(min, max);
-
-	return dis(gen);
-}
-
-
-void Game::spawnEnemy()
-{
-	static Uint32 lastEnemySpawn = 0;
-	Uint32 currentTime = SDL_GetTicks();
-	Uint32 spawnCooltime = 2000; // in milliseconds
-
-	int randomX = getRandomNumber(200, 1300);
-	int randomY = getRandomNumber(100, 800);
-	auto& newEnemy(manager.addEntity());
-
-	if (spawnedEnemies < 10 && (currentTime - lastEnemySpawn >= spawnCooltime))
-	{
-		newEnemy.addComponent<TransformComponent>(2, randomX * map->GetScale(), randomY * map->GetScale());
-		newEnemy.addComponent<SpriteComponent>("enemy", false);
-		newEnemy.addComponent<ColliderComponent>("enemy");
-		newEnemy.addGroup(Game::groupEnemies);
-		Log("EnemySpawned");
-
-		spawnedEnemies++;
-
-		lastEnemySpawn = currentTime;
-	}
-}
-
-
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -107,7 +73,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	// ECS implementation
 
-	map->LoadMap("src/Assets/correctSizeMap.txt", 48, 27);
+	map->LoadMap("src/Assets/map.map", 48, 27);
 
 	player.addComponent<TransformComponent>(4);
 	player.addComponent<SpriteComponent>("player", true);
@@ -143,7 +109,7 @@ void Game::update()
 
 	manager.refresh();
 	manager.update();
-	spawnEnemy();
+	enemyClass.spawnEnemy(map, manager);
 
 	for (auto& c : colliders)
 	{
@@ -172,7 +138,7 @@ void Game::update()
 				{
 					p->destroy();
 					e->destroy();
-					spawnedEnemies--;
+					enemyClass.reduceSpawnedCounter();
 				}
 			}
 		}
@@ -233,6 +199,7 @@ void Game::render()
 
 void Game::clean()
 {
+	delete assets;
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();

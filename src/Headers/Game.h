@@ -3,13 +3,14 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Log.h"
+
 #include <vector>
 #include <cmath>
-#include <vector>
 #include <algorithm> // for std::unique and std::distance
 #include <ctime>
 #include <cstdlib>
 
+class Enemy;
 class ColliderComponent;
 class AssetManager;
 
@@ -25,9 +26,6 @@ public:
 	bool running() { return isRunning; }
 	void render();
 	void clean();
-	
-	void spawnEnemy();
-	int getRandomNumber(int min, int max);
 	
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
@@ -45,7 +43,6 @@ public:
 	};
 
 private:
-	int counter = 0;
 	
 	SDL_Window* window;
 
