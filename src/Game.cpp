@@ -9,6 +9,7 @@
 #include "Headers/AssetManager.h"
 #include "Headers/Enemy.h"
 #include <random>
+#include "SDL_ttf.h"
 
 
 Map* map;
@@ -23,9 +24,10 @@ SDL_Rect Game::camera = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 AssetManager* Game::assets = new AssetManager(&manager);
 
 bool Game::isRunning = false;
+bool Game::gameOver = false;
+int enemyKillCount = 0;
 
 auto& player(manager.addEntity());
-auto& enemy(manager.addEntity());
 
 Game::Game()
 {}
@@ -60,8 +62,21 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 			Log("*Renderer created!*");
 		}
 
+		if (TTF_Init() == -1) {
+			std::cerr << "SDL_ttf initialization error: " << TTF_GetError() << std::endl;
+		}
+
 		isRunning = true;
 	}
+
+	// SDL_ttf
+	font = TTF_OpenFont("src/Assets/BrownieStencil.ttf", 34);
+	if (!font)
+	{
+		std::cerr << "Error loading font: " << TTF_GetError() << std::endl;
+	}
+
+	textColor = { 255, 255, 255, 255 }; // White color
 
 	assets->AddTexture("terrain", "src/Assets/MapAssets/map_assets.png");
 	assets->AddTexture("player", "src/Assets/player_anims.png");
@@ -121,15 +136,7 @@ void Game::update()
 	}
 	
 	for (auto& p : projectiles)
-	{
-		if (p->getComponent<SpriteComponent>().identifier != "playerProjectile")
-		{
-			if (Collision::AABB(player.getComponent<ColliderComponent>().colliderRect, p->getComponent<ColliderComponent>().colliderRect))
-			{
-				p->destroy();
-			}
-		}
-		
+	{	
 		if (p->getComponent<SpriteComponent>().identifier == "playerProjectile")
 		{
 			for (auto& e : enemies)
@@ -138,9 +145,18 @@ void Game::update()
 				{
 					p->destroy();
 					e->destroy();
+					enemyKillCount++;
 					enemyClass.reduceSpawnedCounter();
 				}
 			}
+		}
+	}
+
+	for (auto& e : enemies)
+	{
+		if (Collision::AABB(e->getComponent<ColliderComponent>().colliderRect, player.getComponent<ColliderComponent>().colliderRect))
+		{
+			gameOver = true;
 		}
 	}
 
@@ -193,15 +209,56 @@ void Game::render()
 		p->draw();
 	}
 
-	SDL_RenderPresent(renderer);
+	/* Render enemy counter */
+	std::string counterText = "Enemies Killed: " + std::to_string(enemyKillCount);
 
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, counterText.c_str(), textColor);
+	if (!textSurface) {
+		std::cerr << "Error creating text surface: " << TTF_GetError() << std::endl;
+	}
+
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+	SDL_Rect textRect = { 10, 10, textSurface->w, textSurface->h }; // Adjust the position
+
+	SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+
+	SDL_FreeSurface(textSurface);
+	SDL_DestroyTexture(textTexture);
+
+	SDL_RenderPresent(renderer);
 }
 
 void Game::clean()
 {
 	delete assets;
+	TTF_CloseFont(font);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	TTF_Quit();
+
 	SDL_Quit();
 	Log("Game Cleaned!");
+}
+
+void Game::renderGameOver()
+{
+	std::string gameOverText = "Game Over!" ;
+	font = TTF_OpenFont("src/Assets/Bloody.otf", 200);
+	textColor = { 255, 0, 0, 255 };
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, gameOverText.c_str(), textColor);
+	if (!textSurface) {
+		std::cerr << "Error creating text surface: " << TTF_GetError() << std::endl;
+	}
+
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+	SDL_Rect textRect = { WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 50, textSurface->w, textSurface->h}; // Adjust the position
+
+	SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+
+	SDL_FreeSurface(textSurface);
+	SDL_DestroyTexture(textTexture);
+
+	SDL_RenderPresent(renderer);
 }

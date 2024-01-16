@@ -23,8 +23,17 @@ int main(int argc, char *argv[])
 		frameStart = SDL_GetTicks();
 
 		game->handleEvents();
-		game->update();
-		game->render();
+
+		if (!game->gameOver)
+		{
+			game->update();
+			game->render();
+		}
+		else
+		{
+			game->update();
+			game->renderGameOver();
+		}
 
 		frameTime = SDL_GetTicks() - frameStart;
 

@@ -128,4 +128,9 @@
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="src\Assets\Freedom-10eM.ttf">
+      <Filter>Assets</Filter>
+    </Font>
+  </ItemGroup>
 </Project>
