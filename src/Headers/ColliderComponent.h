@@ -56,10 +56,10 @@ public:
 		}
 		if (tag == "player")
 		{
-			colliderRect.x = static_cast<int>(transform->position.x + transform->velocity.x * transform->speed); //+ 60);
-			colliderRect.y = static_cast<int>(transform->position.y + transform->velocity.y * transform->speed);// +10);
-			colliderRect.w = 11 * transform->scale;
-			colliderRect.h = 25 * transform->scale;
+			colliderRect.x = static_cast<int>(transform->position.x + transform->velocity.x * transform->speed+ 60);
+			colliderRect.y = static_cast<int>(transform->position.y + transform->velocity.y * transform->speed + 35);
+			colliderRect.w = 5 * transform->scale;
+			colliderRect.h = 18 * transform->scale;
 		}
 
 		destRect.x = colliderRect.x - Game::camera.x;
@@ -69,6 +69,6 @@ public:
 	void draw() override
 	{
 		// DEBUG show colliders
-		//TextureManager::Draw(tex, srcRect, destRect, SDL_FLIP_NONE);
+		TextureManager::Draw(tex, srcRect, destRect, SDL_FLIP_NONE);
 	}
 };

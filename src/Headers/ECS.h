@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
+#include "Vector2D.h"
 
 class Component;
 class Entity;
@@ -58,7 +59,9 @@ private:
 	GroupBitSet groupBitSet;
 
 public:
+
 	Entity(Manager& mManager) : manager(mManager){}
+	Vector2D direction;
 
 	void update()
 	{

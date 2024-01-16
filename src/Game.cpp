@@ -124,7 +124,19 @@ void Game::update()
 
 	manager.refresh();
 	manager.update();
-	enemyClass.spawnEnemy(map, manager);
+	enemyClass.spawnEnemy(map, manager, player);
+
+	for (auto& e : manager.getGroup(Game::groupEnemies))
+	{
+		Vector2D playerPos = player.getComponent<TransformComponent>().position;
+		Vector2D enemyPos = e->getComponent<TransformComponent>().position;
+
+		e->direction = playerPos - enemyPos;
+		e->direction.normalize();
+
+		float speed = 2.0f; // Adjust as needed
+		e->getComponent<TransformComponent>().position += e->direction * speed;
+	}
 
 	for (auto& c : colliders)
 	{
@@ -209,7 +221,7 @@ void Game::render()
 		p->draw();
 	}
 
-	/* Render enemy counter */
+	/* Render enemy kill counter */
 	std::string counterText = "Enemies Killed: " + std::to_string(enemyKillCount);
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, counterText.c_str(), textColor);
